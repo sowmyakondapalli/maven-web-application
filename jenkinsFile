@@ -1,0 +1,19 @@
+node{
+    def mavenHome = tool name: "maven 3.9.2"
+	stage('checkout from scm')
+	{
+	git branch: 'dev', credentialsId: '4ccac553-db7d-4cb4-add7-ee9027b1ec41', url: 'https://github.com/sowmyakondapalli/maven-web-application.git'
+	}
+	stage('build')
+	{
+	 sh "${mavenHome}/bin/mvn clean package"
+	}
+	stage('sonar code check')
+	{
+	 sh "${mavenHome}/bin/mvn sonar:sonar"
+	}
+	stage('nexus artifactry ')
+	{
+	 sh "${mavenHome}/bin/mvn deploy"
+	}
+}
